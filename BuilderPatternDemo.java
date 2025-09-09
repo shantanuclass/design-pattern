@@ -1,50 +1,63 @@
-package Builder;
-
-// File: BuilderPatternDemo.java
-
 // Product class
-class Car {
-    private String engine;
-    private int wheels;
-    private String color;
+class Burger {
+    private String bun;
+    private String patty;
+    private boolean cheese;
+    private boolean lettuce;
+    private boolean mayo;
 
-    // Private constructor (only builder can access)
-    private Car(CarBuilder builder) {
-        this.engine = builder.engine;
-        this.wheels = builder.wheels;
-        this.color = builder.color;
+    // private constructor (only Builder can build it)
+    private Burger(BurgerBuilder builder) {
+        this.bun = builder.bun;
+        this.patty = builder.patty;
+        this.cheese = builder.cheese;
+        this.lettuce = builder.lettuce;
+        this.mayo = builder.mayo;
     }
 
-    public void showDetails() {
-        System.out.println("Car with Engine: " + engine +
-                ", Wheels: " + wheels +
-                ", Color: " + color);
+    @Override
+    public String toString() {
+        return "Burger with " + bun + ", " + patty +
+               (cheese ? ", cheese" : "") +
+               (lettuce ? ", lettuce" : "") +
+               (mayo ? ", mayo" : "");
     }
 
-    // Static nested Builder class
-    public static class CarBuilder {
-        private String engine;
-        private int wheels;
-        private String color;
+    // Builder Class
+    public static class BurgerBuilder {
+        private String bun;
+        private String patty;
+        private boolean cheese;
+        private boolean lettuce;
+        private boolean mayo;
 
-        public CarBuilder setEngine(String engine) {
-            this.engine = engine;
+        public BurgerBuilder setBun(String bun) {
+            this.bun = bun;
             return this; // return builder for chaining
         }
 
-        public CarBuilder setWheels(int wheels) {
-            this.wheels = wheels;
+        public BurgerBuilder setPatty(String patty) {
+            this.patty = patty;
             return this;
         }
 
-        public CarBuilder setColor(String color) {
-            this.color = color;
+        public BurgerBuilder addCheese(boolean cheese) {
+            this.cheese = cheese;
             return this;
         }
 
-        // Build method returns the final object
-        public Car build() {
-            return new Car(this);
+        public BurgerBuilder addLettuce(boolean lettuce) {
+            this.lettuce = lettuce;
+            return this;
+        }
+
+        public BurgerBuilder addMayo(boolean mayo) {
+            this.mayo = mayo;
+            return this;
+        }
+
+        public Burger build() {
+            return new Burger(this);
         }
     }
 }
@@ -52,20 +65,23 @@ class Car {
 // Client code
 public class BuilderPatternDemo {
     public static void main(String[] args) {
-        // Build car step by step
-        Car car1 = new Car.CarBuilder()
-                .setEngine("V8")
-                .setWheels(4)
-                .setColor("Red")
+        // Simple burger
+        Burger burger1 = new Burger.BurgerBuilder()
+                .setBun("Sesame Bun")
+                .setPatty("Chicken Patty")
+                .addCheese(true)
                 .build();
 
-        Car car2 = new Car.CarBuilder()
-                .setEngine("Electric")
-                .setWheels(3)
-                .setColor("Blue")
+        System.out.println(burger1);
+
+        // Custom burger
+        Burger burger2 = new Burger.BurgerBuilder()
+                .setBun("Whole Wheat Bun")
+                .setPatty("Veggie Patty")
+                .addLettuce(true)
+                .addMayo(true)
                 .build();
 
-        car1.showDetails();
-        car2.showDetails();
+        System.out.println(burger2);
     }
 }
