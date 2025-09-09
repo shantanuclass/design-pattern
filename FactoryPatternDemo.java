@@ -1,50 +1,33 @@
-package factory;
-
-// File: FactoryPatternDemo.java
-
-// Step 1: Create an interface
-interface Shape {
-    void draw();
+// Product interface
+interface Toy {
+    void play();
 }
 
-// Step 2: Implement concrete classes
-class Circle implements Shape {
-    public void draw() {
-        System.out.println("Drawing a Circle");
-    }
+// Concrete Products
+class Car implements Toy {
+    public void play() { System.out.println("Playing with a car!"); }
 }
 
-class Rectangle implements Shape {
-    public void draw() {
-        System.out.println("Drawing a Rectangle");
-    }
+class Teddy implements Toy {
+    public void play() { System.out.println("Hugging the teddy!"); }
 }
 
-// Step 3: Create Factory class
-class ShapeFactory {
-    // Factory method
-    public Shape getShape(String shapeType) {
-        if (shapeType == null) {
-            return null;
-        }
-        if (shapeType.equalsIgnoreCase("CIRCLE")) {
-            return new Circle();
-        } else if (shapeType.equalsIgnoreCase("RECTANGLE")) {
-            return new Rectangle();
-        }
+// Factory
+class ToyFactory {
+    static Toy getToy(String type) {
+        if (type.equalsIgnoreCase("car")) return new Car();
+        else if (type.equalsIgnoreCase("teddy")) return new Teddy();
         return null;
     }
 }
 
-// Step 4: Use the Factory
+// Client
 public class FactoryPatternDemo {
     public static void main(String[] args) {
-        ShapeFactory factory = new ShapeFactory();
+        Toy toy1 = ToyFactory.getToy("car");
+        toy1.play();
 
-        Shape shape1 = factory.getShape("CIRCLE");
-        shape1.draw();
-
-        Shape shape2 = factory.getShape("RECTANGLE");
-        shape2.draw();
+        Toy toy2 = ToyFactory.getToy("teddy");
+        toy2.play();
     }
 }
