@@ -1,40 +1,35 @@
-// Singleton class
-class Principal {
-    // static instance (only one will exist)
-    private static Principal instance;
+public class Main {
 
-    // private constructor prevents direct object creation
-    private Principal() {}
+    // ----- Singleton Class -----
+    static class Principal {
 
-    // global access point
-    public static Principal getInstance() {
-        if (instance == null) {
-            instance = new Principal();
+        // Only one instance (initially null)
+        private static Principal instance;
+
+        // Private constructor → no one else can create object
+        private Principal() {}
+
+        // Method to return the only instance
+        public static Principal getInstance() {
+            if (instance == null) {
+                instance = new Principal();
+            }
+            return instance;
         }
-        return instance;
+
+        public void announce() {
+            System.out.println("I am the only Principal in this school!");
+        }
     }
 
-    // Example method
-    public void showMessage() {
-        System.out.println("Hello, I am the only Principal!");
-    }
-}
-
-// Client code
-public class SingletonDemo {
+    // ----- Main Method -----
     public static void main(String[] args) {
-        // Trying to get multiple objects
+
         Principal p1 = Principal.getInstance();
         Principal p2 = Principal.getInstance();
 
-        // calling method
-        p1.showMessage();
+        p1.announce();
 
-        // checking if both are same object
-        if (p1 == p2) {
-            System.out.println("Both p1 and p2 are the same instance!");
-        } else {
-            System.out.println("Different instances created!");
-        }
+        System.out.println(p1 == p2);   // true → same object
     }
 }
