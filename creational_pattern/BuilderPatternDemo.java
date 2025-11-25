@@ -1,87 +1,92 @@
-// Product class
-class Burger {
-    private String bun;
-    private String patty;
-    private boolean cheese;
-    private boolean lettuce;
-    private boolean mayo;
+public class Main {
 
-    // private constructor (only Builder can build it)
-    private Burger(BurgerBuilder builder) {
-        this.bun = builder.bun;
-        this.patty = builder.patty;
-        this.cheese = builder.cheese;
-        this.lettuce = builder.lettuce;
-        this.mayo = builder.mayo;
-    }
-
-    @Override
-    public String toString() {
-        return "Burger with " + bun + ", " + patty +
-               (cheese ? ", cheese" : "") +
-               (lettuce ? ", lettuce" : "") +
-               (mayo ? ", mayo" : "");
-    }
-
-    // Builder Class
-    public static class BurgerBuilder {
-        private String bun;
-        private String patty;
+    // ----- Product -----
+    static class Burger {
         private boolean cheese;
         private boolean lettuce;
+        private boolean doublePatty;
         private boolean mayo;
+        private boolean onions;
 
-        public BurgerBuilder setBun(String bun) {
-            this.bun = bun;
-            return this; // return builder for chaining
+        // Private constructor
+        private Burger(Builder builder) {
+            this.cheese = builder.cheese;
+            this.lettuce = builder.lettuce;
+            this.doublePatty = builder.doublePatty;
+            this.mayo = builder.mayo;
+            this.onions = builder.onions;
         }
 
-        public BurgerBuilder setPatty(String patty) {
-            this.patty = patty;
-            return this;
+        public void show() {
+            System.out.println("Your Burger:");
+            System.out.println("Cheese: " + cheese);
+            System.out.println("Lettuce: " + lettuce);
+            System.out.println("Double Patty: " + doublePatty);
+            System.out.println("Mayo: " + mayo);
+            System.out.println("Onions: " + onions);
         }
 
-        public BurgerBuilder addCheese(boolean cheese) {
-            this.cheese = cheese;
-            return this;
-        }
+        // ----- Builder Class -----
+        static class Builder {
+            private boolean cheese;
+            private boolean lettuce;
+            private boolean doublePatty;
+            private boolean mayo;
+            private boolean onions = true; // default: onions ON
 
-        public BurgerBuilder addLettuce(boolean lettuce) {
-            this.lettuce = lettuce;
-            return this;
-        }
+            public Builder addCheese() {
+                this.cheese = true;
+                return this;
+            }
 
-        public BurgerBuilder addMayo(boolean mayo) {
-            this.mayo = mayo;
-            return this;
-        }
+            public Builder addLettuce() {
+                this.lettuce = true;
+                return this;
+            }
 
-        public Burger build() {
-            return new Burger(this);
+            public Builder addDoublePatty() {
+                this.doublePatty = true;
+                return this;
+            }
+
+            public Builder addMayo() {
+                this.mayo = true;
+                return this;
+            }
+
+            public Builder removeOnions() {
+                this.onions = false;
+                return this;
+            }
+
+            public Burger build() {
+                return new Burger(this);
+            }
         }
     }
-}
 
-// Client code
-public class BuilderPatternDemo {
+    // ----- Main Method -----
     public static void main(String[] args) {
-        // Simple burger
-        Burger burger1 = new Burger.BurgerBuilder()
-                .setBun("Sesame Bun")
-                .setPatty("Chicken Patty")
-                .addCheese(true)
+
+        // Custom Burger
+        Burger myBurger = new Burger.Builder()
+                .addCheese()
+                .addLettuce()
+                .addDoublePatty()
+                .addMayo()
+                .removeOnions()
                 .build();
 
-        System.out.println(burger1);
+        myBurger.show();
 
-        // Custom burger
-        Burger burger2 = new Burger.BurgerBuilder()
-                .setBun("Whole Wheat Bun")
-                .setPatty("Veggie Patty")
-                .addLettuce(true)
-                .addMayo(true)
+        System.out.println();
+
+        // Another Burger (different customization)
+        Burger vegBurger = new Burger.Builder()
+                .addLettuce()
+                .addCheese()
                 .build();
 
-        System.out.println(burger2);
+        vegBurger.show();
     }
 }
