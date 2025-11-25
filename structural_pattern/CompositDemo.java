@@ -1,54 +1,63 @@
-import java.util.*;
+public class Main {
 
-// Component
-interface Toy {
-    void show();
-}
-
-// Leaf
-class Car implements Toy {
-    public void show() {
-        System.out.println("This is a Car Toy");
+    // ----- Component (Common Interface) -----
+    interface FileSystem {
+        void showDetails();
     }
-}
 
-class Doll implements Toy {
-    public void show() {
-        System.out.println("This is a Doll Toy");
-    }
-}
+    // ----- Leaf -----
+    static class File implements FileSystem {
+        private String name;
 
-// Composite
-class ToyBox implements Toy {
-    List<Toy> toys = new ArrayList<>();
-    
-    void add(Toy t) { toys.add(t); }
-    
-    public void show() {
-        for (Toy t : toys) {
-            t.show();
+        public File(String name) {
+            this.name = name;
+        }
+
+        public void showDetails() {
+            System.out.println("📄 File: " + name);
         }
     }
-}
 
-// Client
-public class CompositeDemo {
+    // ----- Composite -----
+    static class Folder implements FileSystem {
+        private String name;
+        private java.util.List<FileSystem> items = new java.util.ArrayList<>();
+
+        public Folder(String name) {
+            this.name = name;
+        }
+
+        public void add(FileSystem item) {
+            items.add(item);
+        }
+
+        public void showDetails() {
+            System.out.println("📁 Folder: " + name);
+            for (FileSystem item : items) {
+                item.showDetails(); // file or folder (treated same)
+            }
+        }
+    }
+
+    // ----- Main Method -----
     public static void main(String[] args) {
-        // Create individual toys (Leaf)
-        Toy car = new Car();
-        Toy doll = new Doll();
 
-        // Create toy box and add toys (Composite)
-        ToyBox box = new ToyBox();
-        box.add(car);
-        box.add(doll);
+        // Files
+        File file1 = new File("Resume.pdf");
+        File file2 = new File("Photo.png");
+        File file3 = new File("Notes.txt");
 
-        // Nested box
-        ToyBox bigBox = new ToyBox();
-        bigBox.add(box);
-        bigBox.add(new Car());
+        // Subfolder
+        Folder docsFolder = new Folder("Documents");
+        docsFolder.add(file1);
+        docsFolder.add(file3);
 
-        // Show all
-        bigBox.show();
+        // Main folder
+        Folder mainFolder = new Folder("MyFolder");
+        mainFolder.add(file2);
+        mainFolder.add(docsFolder);  // add subfolder
+
+        // Show structure
+        mainFolder.showDetails();
     }
 }
