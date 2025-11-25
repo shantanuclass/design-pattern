@@ -1,43 +1,63 @@
-// Subsystems
-class Lights {
-    void on()  { System.out.println("Lights On"); }
-    void off() { System.out.println("Lights Off"); }
-}
+public class Main {
 
-class Projector {
-    void start() { System.out.println("Projector Started"); }
-}
-
-class Sound {
-    void play() { System.out.println("Sound Playing"); }
-}
-
-// Facade
-class HomeTheaterFacade {
-    private Lights lights;
-    private Projector projector;
-    private Sound sound;
-
-    HomeTheaterFacade(Lights l, Projector p, Sound s) {
-        this.lights = l;
-        this.projector = p;
-        this.sound = s;
+    // ----- Subsystems -----
+    static class RoomService {
+        void orderFood() {
+            System.out.println("Room Service: Your food order is placed 🍽️");
+        }
     }
 
-    void watchMovie() {
-        lights.off();
-        projector.start();
-        sound.play();
-        System.out.println("Movie Started!");
+    static class CleaningService {
+        void requestCleaning() {
+            System.out.println("Cleaning Service: Your room will be cleaned 🧹");
+        }
     }
-}
 
-// Client
-public class FacadeDemo {
+    static class LaundryService {
+        void sendLaundry() {
+            System.out.println("Laundry Service: Your clothes will be washed 👕");
+        }
+    }
+
+    static class TransportService {
+        void bookCab() {
+            System.out.println("Transport Service: Your cab is booked 🚗");
+        }
+    }
+
+    // ----- Facade (Reception) -----
+    static class Reception {
+
+        private RoomService roomService = new RoomService();
+        private CleaningService cleaning = new CleaningService();
+        private LaundryService laundry = new LaundryService();
+        private TransportService transport = new TransportService();
+
+        void orderFood() {
+            roomService.orderFood();
+        }
+
+        void requestRoomCleaning() {
+            cleaning.requestCleaning();
+        }
+
+        void sendLaundry() {
+            laundry.sendLaundry();
+        }
+
+        void bookTransport() {
+            transport.bookCab();
+        }
+    }
+
+    // ----- Client -----
     public static void main(String[] args) {
-        HomeTheaterFacade theater = new HomeTheaterFacade(
-            new Lights(), new Projector(), new Sound()
-        );
-        theater.watchMovie();
+
+        Reception reception = new Reception();
+
+        reception.orderFood();
+        reception.requestRoomCleaning();
+        reception.sendLaundry();
+        reception.bookTransport();
     }
 }
