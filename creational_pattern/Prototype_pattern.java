@@ -1,38 +1,57 @@
-// Prototype interface
-interface Prototype extends Cloneable {
-    Prototype clone();
-}
+public class Main {
 
-// Concrete Prototype
-class Drawing implements Prototype {
-    private String type;
-
-    public Drawing(String type) {
-        this.type = type;
+    // ----- Prototype Interface -----
+    interface Toy extends Cloneable {
+        Toy clone();
+        void show();
     }
 
-    public void show() {
-        System.out.println("This is a " + type + " drawing.");
+    // ----- Concrete Prototype -----
+    static class ToyRobot implements Toy {
+        private String color;
+        private int height;
+        private boolean hasLaser;
+
+        public ToyRobot(String color, int height, boolean hasLaser) {
+            this.color = color;
+            this.height = height;
+            this.hasLaser = hasLaser;
+        }
+
+        @Override
+        public Toy clone() {
+            return new ToyRobot(this.color, this.height, this.hasLaser);
+        }
+
+        @Override
+        public void show() {
+            System.out.println("Toy Robot:");
+            System.out.println("Color: " + color);
+            System.out.println("Height: " + height + " cm");
+            System.out.println("Laser: " + hasLaser);
+        }
     }
 
-    @Override
-    public Prototype clone() {
-        return new Drawing(this.type); // shallow copy
-    }
-}
-
-// Client
-public class PrototypePatternDemo {
+    // ----- Main Method -----
     public static void main(String[] args) {
-        Prototype d1 = new Drawing("Landscape");
-        ((Drawing) d1).show();
 
-        // clone the object
-        Prototype d2 = d1.clone();
-        ((Drawing) d2).show();
+        // Original Toy Robot
+        ToyRobot original = new ToyRobot("Red", 30, true);
+        System.out.println("Original Robot:");
+        original.show();
 
-        // clone again
-        Prototype d3 = d1.clone();
-        ((Drawing) d3).show();
+        System.out.println();
+
+        // Clone the robot (copy)
+        ToyRobot clone1 = (ToyRobot) original.clone();
+        System.out.println("Cloned Robot:");
+        clone1.show();
+
+        System.out.println();
+
+        // Another clone
+        ToyRobot clone2 = (ToyRobot) original.clone();
+        System.out.println("Another Clone:");
+        clone2.show();
     }
 }
