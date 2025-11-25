@@ -1,52 +1,54 @@
-// Subject
-interface Image {
-    void display();
-}
+public class Main {
 
-// Real Subject
-class RealImage implements Image {
-    private String fileName;
-
-    RealImage(String fileName) {
-        this.fileName = fileName;
-        loadFromDisk();
+    // ----- Subject Interface -----
+    interface OfficeAccess {
+        void enter();
     }
 
-    private void loadFromDisk() {
-        System.out.println("Loading " + fileName);
-    }
+    // ----- Real Subject -----
+    static class RealEmployee implements OfficeAccess {
+        private String name;
 
-    public void display() {
-        System.out.println("Displaying " + fileName);
-    }
-}
-
-// Proxy
-class ProxyImage implements Image {
-    private RealImage realImage;
-    private String fileName;
-
-    ProxyImage(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void display() {
-        if (realImage == null) {
-            realImage = new RealImage(fileName); // load only once
+        public RealEmployee(String name) {
+            this.name = name;
         }
-        realImage.display();
+
+        public void enter() {
+            System.out.println(name + " has entered the office.");
+        }
     }
-}
 
-// Client
-public class ProxyDemo {
+    // ----- Proxy -----
+    static class SecurityGuard implements OfficeAccess {
+
+        private RealEmployee employee;
+
+        public SecurityGuard(RealEmployee employee) {
+            this.employee = employee;
+        }
+
+        public void enter() {
+            if (checkAccess()) {
+                System.out.println("Security Guard: Access granted ✔️");
+                employee.enter();
+            } else {
+                System.out.println("Security Guard: Access denied ❌");
+            }
+        }
+
+        private boolean checkAccess() {
+            // Simple example: allow only employees with valid name
+            return employee != null && employee.name != null && !employee.name.isEmpty();
+        }
+    }
+
+    // ----- Client -----
     public static void main(String[] args) {
-        Image img1 = new ProxyImage("photo1.jpg");
-        Image img2 = new ProxyImage("photo2.jpg");
 
-        // Image loaded only when display() is called
-        img1.display();
-        img1.display();  // second time → no reloading
-        img2.display();
+        RealEmployee employee = new RealEmployee("Shantanu");
+
+        OfficeAccess access = new SecurityGuard(employee);
+
+        access.enter(); // Proxy controls the access
     }
 }
