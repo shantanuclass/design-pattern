@@ -1,49 +1,74 @@
-// Component
-interface IceCream {
-    String make();
-}
+public class Main {
 
-// Concrete Component
-class Vanilla implements IceCream {
-    public String make() {
-        return "Vanilla";
+    // ----- Component Interface -----
+    interface Gift {
+        void wrap();
     }
-}
 
-// Decorator
-class IceCreamDecorator implements IceCream {
-    protected IceCream iceCream;
-    IceCreamDecorator(IceCream i) { this.iceCream = i; }
-    public String make() {
-        return iceCream.make();
+    // ----- Concrete Component -----
+    static class SimpleGift implements Gift {
+        public void wrap() {
+            System.out.println("Gift box 🎁");
+        }
     }
-}
 
-// Concrete Decorators
-class ChocoTopping extends IceCreamDecorator {
-    ChocoTopping(IceCream i) { super(i); }
-    public String make() {
-        return super.make() + " + Choco";
+    // ----- Base Decorator -----
+    static abstract class GiftDecorator implements Gift {
+        protected Gift gift;
+
+        public GiftDecorator(Gift gift) {
+            this.gift = gift;
+        }
+
+        public void wrap() {
+            gift.wrap();
+        }
     }
-}
 
-class NutsTopping extends IceCreamDecorator {
-    NutsTopping(IceCream i) { super(i); }
-    public String make() {
-        return super.make() + " + Nuts";
+    // ----- Concrete Decorators -----
+    static class RedWrapper extends GiftDecorator {
+        public RedWrapper(Gift gift) {
+            super(gift);
+        }
+
+        public void wrap() {
+            super.wrap();
+            System.out.println(" + Wrapped with Red Paper ❤️");
+        }
     }
-}
 
-// Client
-public class DecoratorDemo {
+    static class ShinyWrapper extends GiftDecorator {
+        public ShinyWrapper(Gift gift) {
+            super(gift);
+        }
+
+        public void wrap() {
+            super.wrap();
+            System.out.println(" + Wrapped with Shiny Paper ✨");
+        }
+    }
+
+    static class GlitterWrapper extends GiftDecorator {
+        public GlitterWrapper(Gift gift) {
+            super(gift);
+        }
+
+        public void wrap() {
+            super.wrap();
+            System.out.println(" + Wrapped with Glitter Paper ✨✨");
+        }
+    }
+
+    // ----- Main Method -----
     public static void main(String[] args) {
-        IceCream plain = new Vanilla();
-        System.out.println(plain.make());
 
-        IceCream choco = new ChocoTopping(new Vanilla());
-        System.out.println(choco.make());
+        Gift gift = new SimpleGift();
 
-        IceCream fullyLoaded = new NutsTopping(new ChocoTopping(new Vanilla()));
-        System.out.println(fullyLoaded.make());
+        // Wrap with multiple layers
+        gift = new RedWrapper(gift);
+        gift = new ShinyWrapper(gift);
+        gift = new GlitterWrapper(gift);
+
+        gift.wrap();  // final decorated gift
     }
 }
