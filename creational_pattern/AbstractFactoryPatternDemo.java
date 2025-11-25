@@ -1,41 +1,82 @@
-// Abstract Products
-interface Ride { void enjoy(); }
-interface Food { void eat(); }
+public class Main {
 
-// Concrete Products - Disney
-class DisneyRide implements Ride { public void enjoy() { System.out.println("Disney ride!"); } }
-class DisneyFood implements Food { public void eat() { System.out.println("Eating Disney food!"); } }
+    // ----- Product Interfaces -----
+    interface Paint {
+        void usePaint();
+    }
 
-// Concrete Products - Marvel
-class MarvelRide implements Ride { public void enjoy() { System.out.println("Marvel ride!"); } }
-class MarvelFood implements Food { public void eat() { System.out.println("Eating Marvel food!"); } }
+    interface Brush {
+        void useBrush();
+    }
 
-// Abstract Factory
-interface ThemeFactory {
-    Ride createRide();
-    Food createFood();
-}
+    // ----- Concrete Products (Watercolor Family) -----
+    static class WatercolorPaint implements Paint {
+        public void usePaint() {
+            System.out.println("Using Watercolor Paint 🎨");
+        }
+    }
 
-// Concrete Factories
-class DisneyFactory implements ThemeFactory {
-    public Ride createRide() { return new DisneyRide(); }
-    public Food createFood() { return new DisneyFood(); }
-}
+    static class WatercolorBrush implements Brush {
+        public void useBrush() {
+            System.out.println("Using Watercolor Brush 🖌️");
+        }
+    }
 
-class MarvelFactory implements ThemeFactory {
-    public Ride createRide() { return new MarvelRide(); }
-    public Food createFood() { return new MarvelFood(); }
-}
+    // ----- Concrete Products (Oil Painting Family) -----
+    static class OilPaint implements Paint {
+        public void usePaint() {
+            System.out.println("Using Oil Paint 🌈");
+        }
+    }
 
-// Client
-public class AbstractFactoryDemo {
+    static class OilBrush implements Brush {
+        public void useBrush() {
+            System.out.println("Using Oil Brush 🖌️");
+        }
+    }
+
+    // ----- Abstract Factory -----
+    interface PaintingKitFactory {
+        Paint createPaint();
+        Brush createBrush();
+    }
+
+    // ----- Concrete Factories -----
+    static class WatercolorKitFactory implements PaintingKitFactory {
+        public Paint createPaint() {
+            return new WatercolorPaint();
+        }
+        public Brush createBrush() {
+            return new WatercolorBrush();
+        }
+    }
+
+    static class OilPaintingKitFactory implements PaintingKitFactory {
+        public Paint createPaint() {
+            return new OilPaint();
+        }
+        public Brush createBrush() {
+            return new OilBrush();
+        }
+    }
+
+    // ----- Main Method -----
     public static void main(String[] args) {
-        ThemeFactory disney = new DisneyFactory();
-        disney.createRide().enjoy();
-        disney.createFood().eat();
 
-        ThemeFactory marvel = new MarvelFactory();
-        marvel.createRide().enjoy();
-        marvel.createFood().eat();
+        // Buying Watercolor Kit
+        PaintingKitFactory watercolorKit = new WatercolorKitFactory();
+        Paint wcPaint = watercolorKit.createPaint();
+        Brush wcBrush = watercolorKit.createBrush();
+        wcPaint.usePaint();
+        wcBrush.useBrush();
+
+        System.out.println();
+
+        // Buying Oil Painting Kit
+        PaintingKitFactory oilKit = new OilPaintingKitFactory();
+        Paint oilPaint = oilKit.createPaint();
+        Brush oilBrush = oilKit.createBrush();
+        oilPaint.usePaint();
+        oilBrush.useBrush();
     }
 }
